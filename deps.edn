@@ -11,7 +11,7 @@
            :cider {:extra-deps {com.cemerick/piggieback {:mvn/version "0.2.2"
                                                          :exclusions  [com.google.javascript/closure-compiler]}
 
-                                cider/cider-nrepl       {:mvn/version "0.18.0-SNAPSHOT"}
+                                cider/cider-nrepl       {:mvn/version "0.18.0"}
                                 org.clojure/tools.nrepl {:mvn/version "0.2.13"}
                                 refactor-nrepl          {:mvn/version "2.4.0-SNAPSHOT"}}
 
