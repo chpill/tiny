@@ -2,7 +2,7 @@
   (:require react-dom
             goog.object
             [tiny.sub :as sub]
-            [tiny.element :as tiny-element :refer [e t]]
+            [tiny.api :as tiny-api :refer [e t]]
             [tiny.ex1]))
 
 

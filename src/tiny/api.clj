@@ -2,7 +2,18 @@
   (:require [clojure.spec.alpha :as s]))
 
 
-;; Inspired from rum/core.clj
+
+;; from rum/core.clj
+
+(defn- fn-body? [form]
+  (when (and (seq? form)
+             (vector? (first form)))
+    (if (= '< (second form))
+      (throw (IllegalArgumentException. "Mixins must be given before argument list"))
+      true)))
+
+
+
 (defn- parse-defc
   ":name  :doc?  <? :mixins* :bodies+
    symbol string <  exprs    fn-body?"
