@@ -6,14 +6,12 @@
 
  :paths ["src" "target"]
 
- :aliases {:fig {:extra-deps {com.bhauman/figwheel-main {:mvn/version "0.1.4"}}}
+ :aliases {:fig {:extra-deps {com.bhauman/figwheel-main {:mvn/version "0.1.5"}}}
 
-           :cider {:extra-deps {com.cemerick/piggieback {:mvn/version "0.2.2"
-                                                         :exclusions  [com.google.javascript/closure-compiler]}
-
-                                cider/cider-nrepl       {:mvn/version "0.18.0"}
-                                org.clojure/tools.nrepl {:mvn/version "0.2.13"}
-                                refactor-nrepl          {:mvn/version "2.4.0-SNAPSHOT"}}
+           :cider {:extra-deps {cider/piggieback  {:mvn/version "0.3.8"}
+                                cider/cider-nrepl {:mvn/version "0.18.0"}
+                                nrepl             {:mvn/version "0.4.4"}
+                                refactor-nrepl    {:mvn/version "2.4.0-SNAPSHOT"}}
 
                    :extra-paths ["dev"]}}}
 
