@@ -28,14 +28,31 @@
 
 (goog.object/set fn-cpt "tiny?" true)
 
+
+(def *stub-store (atom {:description "FROM STORE!"}))
+
+(def store-context (js/React.createContext))
+(def Provider (.-Provider store-context))
+(def Consumer (.-Consumer store-context))
+
+
+(tiny.api/defc Plop-into-context []
+  (e Consumer nil
+     (fn [*store]
+       (e "p" nil "Context contained: "
+          (-> *store deref :description)))))
+
+
 (defn app []
-  (e "div" #js {:className "Plop"
-                :style #js {:backgroundColor "papayawhip"
-                            :margin 10}}
-     (e "p" nil "texte 1")
-     (e "p" nil "texte 2")
-     (t tiny.ex1/Plop {:a-prop "PLOUF PROP"})
-     (t fn-cpt {:a "b"})))
+  (e Provider #js {:value *stub-store}
+     (e "div" #js {:className "Plop"
+                   :style #js {:backgroundColor "papayawhip"
+                               :margin 10}}
+        (e "p" nil "texte 1")
+        (e "p" nil "texte 2")
+        (t Plop-into-context nil)
+        (t tiny.ex1/Plop {:a-prop "PLOUF PROP"})
+        (t fn-cpt {:a "b"}))))
 
 
 (defonce *load-counter (atom 0))
