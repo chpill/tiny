@@ -1,14 +1,20 @@
-{:deps {org.clojure/clojure {:mvn/version "1.9.0"}
-        org.clojure/clojurescript {:mvn/version "1.10.339"}
-        cljsjs/react {:mvn/version "16.4.1-0"}
-        cljsjs/react-dom {:mvn/version "16.4.1-0"}
-        cljsjs/create-react-class {:mvn/version "15.6.3-1"}}
+{:deps {org.clojure/clojure {:mvn/version "1.10.0-beta4"}
+        org.clojure/clojurescript {:git/url "https://github.com/clojure/clojurescript"
+                                   :sha "6b9a37a294746148d3f4f8c1b6839823fe6e23f3"}
+        ;; cljsjs/react {:mvn/version "16.4.1-0"}
+        ;; cljsjs/react-dom {:mvn/version "16.4.1-0"}
+        ;; cljsjs/create-react-class {:mvn/version "15.6.3-1"}
+        ;; org.martinklepsch/derivatives {:mvn/version "0.3.0"}
+        com.bhauman/figwheel-main {:mvn/version "0.1.9"}
+        cider/piggieback  {:mvn/version "0.3.9"}
+        hicada {:mvn/version "0.1.8"}
+        zprint {:mvn/version "0.4.11"}}
 
- :paths ["src" "target"]
+ :paths ["src" "target" "dev"]
 
  :aliases {:fig {:extra-deps {com.bhauman/figwheel-main {:mvn/version "0.1.5"}}}
 
-           :cider {:extra-deps {cider/piggieback  {:mvn/version "0.3.8"}
+           :cider {:extra-deps {
                                 cider/cider-nrepl {:mvn/version "0.18.0"}
                                 nrepl             {:mvn/version "0.4.4"}
                                 refactor-nrepl    {:mvn/version "2.4.0-SNAPSHOT"}}

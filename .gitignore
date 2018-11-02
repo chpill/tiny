@@ -1,3 +1,4 @@
 target/
 .cpcache/
 figwheel-main.log
+node_modules/
