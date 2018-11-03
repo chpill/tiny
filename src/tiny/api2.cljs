@@ -1,5 +1,5 @@
 (ns tiny.api2
-  (:require-macros [tiny.api2 :refer [e]])
+  (:require-macros [tiny.api2 :refer [e t]])
   (:require react
             tiny.react-checks
             tiny.guard))
@@ -19,7 +19,7 @@
 
 ;; TODO add dev validation for config, key and ref?
 ;; TODO2 macro to do some of this at compile time?
-(defn t
+(defn internal-t
   "** WARNING: VERY EXPERIMENTAL **
 
   Trimmed down version of react.createElement that plays nice with cljs
@@ -28,24 +28,25 @@
   This voluntarily does not support children. If you want to pass other
   components through here, you may pass them inside the config map and use the
   render props pattern."
-  ([type] (t type {}))
-  ([type config]
-   ;; Meta would not work, the type must be a function or an instance of Component
-   (cond-> #js {:$$typeof REACT_ELEMENT_TYPE
-                :type type
-                :key (:key config)
-                :ref (:ref config)
-                :props config,
+  [type config source-infos]
+  ;; Meta would not work, the type must be a function or an instance of Component
+  (cond-> #js {:$$typeof REACT_ELEMENT_TYPE
+               :type type
+               :key (:key config)
+               :ref (:ref config)
+               :props config,
 
-                ;; does this work?
-                :_owner react/__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner.current}
+               ;; does this work?
+               :_owner react/__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner.current}
 
-     ;; add similar dev props
-     (identical? js/goog.DEBUG true)
-     ;; TODO: what can we do for those dev props?
-     (tiny.react-checks/add-dev-props nil ;; self
-                                      nil ;; source
-                                      ))))
+    ;; add similar dev props
+    (identical? js/goog.DEBUG true)
+    ;; TODO: what can we do for those dev props?
+    (tiny.react-checks/add-dev-props
+     ;; nil ;; self
+     ;; nil ;; source
+     (doto (this-as self self) js/console.log)
+     (doto source-infos js/console.log))))
 
 
 (defn plop [{:keys [text]}]
@@ -59,6 +60,8 @@
                          :color "green"}}
              text])))]))
 
+
+;; (js/console.log (t plop {:text "lala"}))
 
 (defn with-raw-react-element-clone []
   (let [e1 (e [:p {:key "original"}
