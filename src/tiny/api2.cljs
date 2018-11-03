@@ -19,16 +19,22 @@
 ;; TODO add dev validation for config, key and ref?
 ;; TODO2 macro to do some of this at compile time?
 (defn t
+  "** WARNING: VERY EXPERIMENTAL **
+
+  Trimmed down version of react.createElement that plays nice with cljs
+  datastructures as props.
+
+  This voluntarily does not support children. If you want to pass other
+  components through here, you may pass them inside the config map and use the
+  render props pattern."
   ([type] (t type {}))
-  ([type config & children]
+  ([type config]
    ;; Meta would not work, the type must be a function or an instance of Component
    (cond-> #js {:$$typeof REACT_ELEMENT_TYPE
                 :type type
                 :key (:key config)
                 :ref (:ref config)
-                :props (if (empty? children)
-                         config
-                         (assoc config :children children)),
+                :props config,
 
                 ;; does this work?
                 :_owner react/__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner.current}
@@ -42,12 +48,40 @@
 
 
 (defn plop [{:keys [text]}]
-  (e [:div {:style {:background-color "red"
-                    :height "100px"
+  (e [:div {:style {:background-color "papayawhip"
+                    ;; :height "100px"
                     :width  "800px"}}
-      [:p text]]))
+      (for [x (range 4)]
+        (identity
+         (e [:p {:key x
+                 :style {:text-align "center"
+                         :color "green"}}
+             text])))]))
 
-(defn plouf [{:keys [n]}]
+
+(defn with-raw-react-element-clone []
+  (let [e1 (e [:p {:key "original"}
+               "ORIGINAL OR CLONE?"])
+        e2 (react/cloneElement e1 #js {:key "clone"})]
+
+    (e #js [e1 e2])))
+
+(defn with-custom-react-element-clone []
+  (let [t1 (t plop {:key "t-original" :text "lala"})
+        t2 (react/cloneElement t1 #js {:key "t-clone"})]
+    #js [t1 t2]))
+
+
+(comment
+  (let [t1 (t plop {:key "t-original" :text "lala"})]
+    (react/cloneElement t1 #js {:key "t-clone"})))
+
+
+
+
+(defn plouf
+  "Example creating initial state from a prop"
+  [{:keys [n]}]
   (let [[counter set-counter]
         ;;[n js/console.log]
         (react/useState n)
@@ -55,23 +89,30 @@
     (e [:div {:key n}
         [:p (str "My argument is: " counter)]
         [:button {:on-click #(set-counter (inc counter))}
-         "INCREMENT"]])))
+         "INCREMENT PLOP??"]])))
+
 
 (defn app []
   (let [[counter, set-counter] (react/useState 42)]
-    (e [:div [:p "2 children follow"]
+    (e [:div {:style {:display "flex"
+                      :flex-direction "column"
+                      :align-items "center"}}
+        [:p "2 children follow"]
         [:div [:p "base prop for last child:" counter]
          [:button {:on-click #(set-counter (inc counter))}
           "INCREMENT base prop"]]
 
+        (t with-raw-react-element-clone)
+
+        (comment
+          "This breaks, we cannot clone our custom react elements"
+          ;; TODO introduce an error boundary at the top to warn clearly about this?
+          (t with-custom-react-element-clone))
+
         (t plop {:text "lalala"})
+
         (t plouf {:key counter
                   :n counter})])))
-
-
-
-
-
 
 
 

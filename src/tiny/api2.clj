@@ -16,5 +16,6 @@
                                  ;; :default-ns 'react-dom
                                  ;; :no-string-tags? true
                                  ;; raw-js-props
+                                 :rewrite-for? true
                                  :array-children? false}
                            {} &env))
