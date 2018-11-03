@@ -6,7 +6,7 @@
             ;; [tiny.api :as tiny-api :refer [e t]]
             ;; [tiny.ex1]
 
-            [tiny.api2]))
+            [tiny.api2 :refer [t]]))
 
 
 ;; (js/console.log "============= loading core =============")
@@ -67,15 +67,12 @@
 ;; =======================================================
 
 (defn app2 []
-  (tiny.api2/e [tiny.api2/plop "lalala"]))
+  (tiny.api2/e
+   [:div {}
+    (t (tiny.api2/plop "lalala"))]))
 
 
 
-(comment
-
-  (macroexpand-1 '(tiny.api2/e [tiny.api2/plop "lalala"]))
-
-  )
 
 ;; =======================================================
 
@@ -88,6 +85,12 @@
 
 
 (do (js/console.log "reactdom.render")
-    (react-dom/render (tiny.api2/app)
+    (react-dom/render (t tiny.api2/app)
 
                       (app-div! "tiny-demo-app")))
+
+
+
+;; Night mode ;)
+(goog.object/set document.body "style" "background: grey")
+

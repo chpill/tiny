@@ -1,4 +1,6 @@
-target/
-.cpcache/
-figwheel-main.log
-node_modules/
+/target/
+/out/
+/.cpcache/
+/figwheel-main.log
+/node_modules/
+

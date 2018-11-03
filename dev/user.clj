@@ -13,3 +13,16 @@
                         :open-url false
                         :log-file "figwheel-main.log"}
                        {:id "dev" :options cljs-options}))
+
+
+
+(comment
+
+  (go!)
+
+  (do (require '[cljs.build.api])
+      (cljs.build.api/build "src/" cljs-options))
+
+  )
+
+
