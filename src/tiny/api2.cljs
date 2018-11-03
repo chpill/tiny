@@ -1,7 +1,8 @@
 (ns tiny.api2
   (:require-macros [tiny.api2 :refer [e]])
   (:require react
-            [tiny.react-checks]))
+            tiny.react-checks
+            tiny.guard))
 
 (def react-create-element react/createElement)
 
@@ -91,28 +92,37 @@
         [:button {:on-click #(set-counter (inc counter))}
          "INCREMENT PLOP??"]])))
 
+(macroexpand-1 '(e [:> tiny.guard/warn-on-clone "plop"]))
+
+(macroexpand-1 '(e [:div]))
 
 (defn app []
-  (let [[counter, set-counter] (react/useState 42)]
-    (e [:div {:style {:display "flex"
-                      :flex-direction "column"
-                      :align-items "center"}}
-        [:p "2 children follow"]
-        [:div [:p "base prop for last child:" counter]
-         [:button {:on-click #(set-counter (inc counter))}
-          "INCREMENT base prop"]]
+  (let [[counter set-counter] (react/useState 42)
+        [trigger-error? trigger-error!] (react/useState false)]
+    (tiny.guard/warn-on-clone
+     (e [:div {:style {:display "flex"
+                       :flex-direction "column"
+                       :align-items "center"}}
+         [:p "2 children follow"]
 
-        (t with-raw-react-element-clone)
+         (t with-raw-react-element-clone)
 
-        (comment
-          "This breaks, we cannot clone our custom react elements"
-          ;; TODO introduce an error boundary at the top to warn clearly about this?
-          (t with-custom-react-element-clone))
+         [:div [:p "trigger error: " (if trigger-error? "YES" "NO")]
+          [:button {:on-click #(trigger-error! true)}
+           "TRIGGER ERROR"]]
 
-        (t plop {:text "lalala"})
+         ;; This voluntarily triggers an error, by "react cloning" one our custom react component
+         (when trigger-error?
+           (t with-custom-react-element-clone))
 
-        (t plouf {:key counter
-                  :n counter})])))
+         (t plop {:text "lalala"})
+
+         [:div [:p "base prop for last child:" counter]
+          [:button {:on-click #(set-counter (inc counter))}
+           "INCREMENT base prop"]]
+
+         (t plouf {:key counter
+                   :n counter})]))))
 
 
 
