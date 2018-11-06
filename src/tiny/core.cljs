@@ -2,11 +2,11 @@
   (:require react-dom
             ;; react
             goog.object
+            tiny.example2
             ;; [tiny.sub :as sub]
             ;; [tiny.api :as tiny-api :refer [e t]]
             ;; [tiny.ex1]
-
-            [tiny.api2 :refer [t]]))
+            ))
 
 
 ;; (js/console.log "============= loading core =============")
@@ -66,16 +66,6 @@
 
 ;; =======================================================
 
-(defn app2 []
-  (tiny.api2/e
-   [:div {}
-    (t (tiny.api2/plop "lalala"))]))
-
-
-
-
-;; =======================================================
-
 
 (defn app-div! [dom-id]
   (or (js/document.getElementById dom-id)
@@ -85,7 +75,7 @@
 
 
 (do (js/console.log "reactdom.render")
-    (react-dom/render (t tiny.api2/app)
+    (react-dom/render (tiny.example2/make-app)
 
                       (app-div! "tiny-demo-app")))
 
