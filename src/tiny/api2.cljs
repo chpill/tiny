@@ -29,7 +29,6 @@
   components through here, you may pass them inside the config map and use the
   render props pattern."
   [type config source-infos]
-  ;; Meta would not work, the type must be a function or an instance of Component
   (cond-> #js {:$$typeof REACT_ELEMENT_TYPE
                :type type
                :key (:key config)
@@ -39,13 +38,13 @@
                ;; does this work?
                :_owner react/__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner.current}
 
-    ;; add similar dev props
     (identical? js/goog.DEBUG true)
-    ;; TODO: what can we do for those dev props?
     (tiny.react-checks/add-dev-props
-     ;; nil ;; self
-     ;; nil ;; source
-     (doto (this-as self self) js/console.log)
+     ;; TODO check if `this` is what react expects?. What do we get in the
+     ;; devtools with this?
+     (doto (this-as self
+             (js/console.log "this?" self)
+             self) js/console.log)
      (doto source-infos js/console.log))))
 
 
