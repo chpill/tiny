@@ -1,5 +1,5 @@
 (ns tiny.api2
-  (:require-macros [tiny.api2 :refer [e t]])
+  (:require-macros [tiny.api2 :refer [c e]])
   (:require react
             tiny.react-checks
             tiny.guard))
@@ -19,7 +19,7 @@
 
 ;; TODO add dev validation for config, key and ref?
 ;; TODO2 macro to do some of this at compile time?
-(defn internal-t
+(defn c-internal
   "** WARNING: VERY EXPERIMENTAL **
 
   Trimmed down version of react.createElement that plays nice with cljs
@@ -46,24 +46,6 @@
              (js/console.log "this?" self)
              self) js/console.log)
      (doto source-infos js/console.log))))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 (comment
 

@@ -39,11 +39,11 @@
                :lineNumber line})))
 
 
-(defn t-helper
-  ([type config amp-env] `(internal-t ~type
+(defn c-helper
+  ([type config amp-env] `(c-internal ~type
                                       ~config
                                       ~(get-source-from-macro-env amp-env))))
 
-(defmacro t [type & [config]]
-  (t-helper type (or config {}) &env))
+(defmacro c [type & [config]]
+  (c-helper type (or config {}) &env))
 

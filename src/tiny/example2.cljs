@@ -1,5 +1,5 @@
 (ns tiny.example2
-  (:require [tiny.api2 :refer [e t]]
+  (:require [tiny.api2 :refer [c e]]
             react))
 
 
@@ -16,7 +16,7 @@
              text])))]))
 
 
-;; (js/console.log (t plop {:text "lala"}))
+;; (js/console.log (c plop {:text "lala"}))
 
 (defn with-raw-react-element-clone []
   (let [e1 (e [:p {:key "original"}
@@ -26,13 +26,13 @@
     (e #js [e1 e2])))
 
 (defn with-custom-react-element-clone []
-  (let [t1 (t plop {:key "t-original" :text "lala"})
+  (let [t1 (c plop {:key "t-original" :text "lala"})
         t2 (react/cloneElement t1 #js {:key "t-clone"})]
     #js [t1 t2]))
 
 
 (comment
-  (let [t1 (t plop {:key "t-original" :text "lala"})]
+  (let [t1 (c plop {:key "t-original" :text "lala"})]
     (react/cloneElement t1 #js {:key "t-clone"})))
 
 
@@ -48,7 +48,7 @@
     (e [:div {:key n}
         [:p (str "My argument is: " counter)]
         [:button {:on-click #(set-counter (inc counter))}
-         "INCREMENT PLOP??"]])))
+         "increment leaf internal state"]])))
 
 (macroexpand-1 '(e [:> tiny.guard/warn-on-clone "plop"]))
 
@@ -63,7 +63,7 @@
                        :align-items "center"}}
          [:p "2 children follow"]
 
-         (t with-raw-react-element-clone)
+         (c with-raw-react-element-clone)
 
          [:div [:p "trigger error: " (if trigger-error? "YES" "NO")]
           [:button {:on-click #(trigger-error! true)}
@@ -71,18 +71,18 @@
 
          ;; This voluntarily triggers an error, by "react cloning" one our custom react component
          (when trigger-error?
-           (t with-custom-react-element-clone))
+           (c with-custom-react-element-clone))
 
-         (t plop {:text "lalala"})
+         (c plop {:text "lalala"})
 
          [:div [:p "base prop for last child:" counter]
           [:button {:on-click #(set-counter (inc counter))}
-           "INCREMENT base prop"]]
+           "increment base prop"]]
 
-         (t plouf {:key counter
+         (c plouf {:key counter
                    :n counter})]))))
 
 
 
 
-(defn make-app [] (t app))
+(defn make-app [] (c app))
